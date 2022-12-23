@@ -1,4 +1,4 @@
-name: Check Stock
+name: Flipper Zero Stock
 on:
   workflow_dispatch:
   schedule:
