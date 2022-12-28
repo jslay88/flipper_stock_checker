@@ -1,12 +1,18 @@
 # Check for stock availability of Flipper Zero
 # with optional Discord Webhook Notification
 import json
+import logging
 import os
 
 import requests
 from bs4 import BeautifulSoup
 
 
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(os.getenv("LOG_LEVEL", logging.INFO))
+
+PRODUCT_URL = os.getenv("PRODUCT_URL", "https://shop.flipperzero.one")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 
 
@@ -18,26 +24,29 @@ def send_notification(message: str):
 
 
 def check_stock():
-    resp = requests.get("https://shop.flipperzero.one")
+    resp = requests.get(PRODUCT_URL)
     if resp.status_code != 200:
         send_notification(f"Status Code Error: {resp.status_code}")
         return
     soup = BeautifulSoup(resp.content.decode("utf-8"), "html.parser")
-    results = soup.find_all(
-        "script", id=lambda x: x and x.startswith("ProductJson-")
-    )
+    results = soup.find_all("script", id=lambda x: x and x.startswith("ProductJson-"))
     if not results:
         send_notification("Unable to find ProductJson")
         return
     data = json.loads(results[0].text)
+    logger.debug(f"Product Json: {json.dumps(data, indent=2)}")
     if "available" not in data:
         send_notification("available key missing from ProductJson")
         return
     if data.get("available"):
-        send_notification("Product Available!\n\nhttps://shop.flipperzero.one")
-        print("Product Available")
+        send_notification(
+            f"{data.get('title', 'Product')} is Available!\n\n{PRODUCT_URL}"
+        )
+        print(
+            f"{data.get('title', 'Product')} is Available!\n\n{PRODUCT_URL}"
+        )
         return True
-    print("Product Unavailable")
+    print(f"{data.get('title', 'Product')} is Unavailable.\n\n{PRODUCT_URL}")
     return False
 
 

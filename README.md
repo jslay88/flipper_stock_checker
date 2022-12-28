@@ -1,6 +1,7 @@
 # Flipper Zero Stock Checker
 
 [![Flipper Zero Stock](https://github.com/jslay88/flipper_stock_checker/actions/workflows/check_stock.yml/badge.svg?event=schedule)](https://shop.flipperzero.one)
+[![WiFi Devboard for Flipper Zero Stock](https://github.com/jslay88/flipper_stock_checker/actions/workflows/check_wifi_stock.yml/badge.svg?event=schedule)](https://shop.flipperzero.one/products/wifi-devboard)
 
 Badge represents current Flipper Zero Stock on the 
 [official shop](https://shop.flipperzero.one). 

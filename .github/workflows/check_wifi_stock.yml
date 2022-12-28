@@ -1,0 +1,23 @@
+name: WiFi Devboard for Flipper Zero Stock
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *'
+
+jobs:
+  check_stock:
+    runs-on: ubuntu-latest
+    name: Check WiFi Devboard Stock
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Run Script
+        env:
+          PRODUCT_URL: https://shop.flipperzero.one/products/wifi-devboard
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL_DEVBOARD }}
+        run: |
+          pip install -r requirements.txt
+          python flipper.py
