@@ -17,6 +17,7 @@ WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 
 
 def send_notification(message: str):
+    print(message)
     # Discord Channel Webhook
     if not WEBHOOK_URL:
         return
@@ -38,15 +39,11 @@ def check_stock():
     if "available" not in data:
         send_notification("available key missing from ProductJson")
         return
+    product = data.get("title", "Product")
     if data.get("available"):
-        send_notification(
-            f"{data.get('title', 'Product')} is Available!\n\n{PRODUCT_URL}"
-        )
-        print(
-            f"{data.get('title', 'Product')} is Available!\n\n{PRODUCT_URL}"
-        )
+        send_notification(f"{product} is Available!\n\n{PRODUCT_URL}")
         return True
-    print(f"{data.get('title', 'Product')} is Unavailable.\n\n{PRODUCT_URL}")
+    print(f"{product} is Unavailable.\n\n{PRODUCT_URL}")
     return False
 
 
